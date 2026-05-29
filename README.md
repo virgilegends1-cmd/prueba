@@ -2,7 +2,7 @@
 
 **An Arduino framework to control the SpiderBot toy (which uses a proprietary XN297 protocol) using a standard nRF24L01 radio module.**
 
-This project uses software abstracts the XN297 protocol. It emulates the preamble, scrambler, software CRC, and frequency hopping sequence, allowing you to control the SpiderBot and receive telemetry (health/shots) using an ESP32 or Arduino.
+This project abstracts the XN297 protocol. It emulates the preamble, scrambler, software CRC, and frequency hopping sequence, allowing you to control the SpiderBot and receive telemetry (health/shots) using an ESP32 or Arduino.
 
 ---
 
@@ -11,13 +11,13 @@ This project uses software abstracts the XN297 protocol. It emulates the preambl
 The framework is built around a central hub and modular adapters. You don't need to touch the radio protocol; you just plug adapters into the controller:
 
 1. **`SpiderBot_Controller` (The Hub):** Manages the XN297 state machine (Searching -> Waiting ACK -> Bound), frequency hopping, and packet encoding/decoding.
-2. **`RadioAdapter`:** The hardware layer communicating with the nRF24L01.
+2. **`RadioAdapter`:** Configure and prepare the nRF24L01.
 3. **`InputAdapters`:** Read user input (Serial, Analog Joysticks, Bluetooth Gamepads...) and translate them into SpiderBot commands. 
 4. **`OutputAdapters`:** Receive telemetry from the SpiderBot (Health, Shots left) and display it (Serial monitor, OLED screens...). 
 
 ---
 
-## 🚀 Installation & Dependencies
+## 📥 Installation & Dependencies
 
 ### Arduino IDE
 1. Download this repository as a `.zip` file.
@@ -56,8 +56,6 @@ To create a new way to control the SpiderBot (e.g., a web server, a custom remot
 **The Payload Rule:** The SpiderBot requires `Byte 1` to be the logical inverse of `Byte 0` (Bitwise NOT). For example, if UP is `0x01` (`00000001`), its inverse is `0xFE` (`11111110`). The helper method `_cmd()` handles array creation for you.
 
 ```cpp
-#include "SpiderBot_InputAdapter.h"
-
 class MyCustomInput : public SpiderBot_InputAdapter {
 public:
     void begin() override {
@@ -94,8 +92,6 @@ The `SpiderBotState` struct provides:
 *   `shots` (0 to 3)
 
 ```cpp
-#include "SpiderBot_Controller.h"
-
 class MyLEDOutput : public SpiderBot_OutputAdapter {
 public:
     void begin() override {
@@ -115,7 +111,7 @@ public:
 
 ---
 
-## 🎮 Basic Usage Example
+## 🕹️ Basic Usage Example
 
 Here is how you put all the pieces together in your main `.ino` sketch:
 
@@ -152,7 +148,7 @@ void loop() {
 
 ---
 
-## 🕹️ Pairing a Bluetooth Controller (Bluepad32)
+## 🎮 Pairing a Bluetooth Controller (Bluepad32)
 
 If you are using the `Bluepad32InputAdapter` to control the SpiderBot with a wireless gamepad, the pairing process is handled automatically by the ESP32.
 
